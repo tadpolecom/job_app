@@ -20,7 +20,7 @@ app = Flask(__name__)
 line_bot_api = LineBotApi(os.environ['YOUR_CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['YOUR_CHANNEL_SECRET'])
 get_connection = psycopg2.connect(os.environ.get('DATABASE_URL'))
-regi_num = '123456'
+regi_num = ['123456','abcdef']
 shift_data=[]
 
 
@@ -30,13 +30,6 @@ def main():
         with conn.cursor() as cur:
             cur.execute('SELECT * FROM shift_table', ('foo',))
             rows = cur.fetchall()
-
-    tmp = []
-    data = []
-    for item in rows:
-        tmp.append(item)
-        for item in tmp:
-            data.append(tmp)
 
     rowNum = 0
     workbook = xlsxwriter.Workbook('fileName' + '.xlsx')
@@ -105,7 +98,7 @@ def check_messege(event):
         if ((len(shift_data) - 1) % 3) == 0:
             enter = []
             for i in range(round((len(shift_data) - 1) / 3)):
-                enter.append([shift_data[0], shift_data[i + 1], shift_data[i + 2], shift_data[i + 3]])
+                enter.append([shift_data[0], shift_data[3*i + 1], shift_data[3*i + 2], shift_data[3*i + 3]])
  
             with get_connection as conn:
                 with conn.cursor() as cur:
