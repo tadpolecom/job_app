@@ -72,6 +72,7 @@ def check_messege(event):
         regi_flag = True
     elif event.message.text in regi_num and regi_flag == True:
         enter_flag = True
+        shift_data = []
         shift_data.append(event.message.text)
         line_bot_api.reply_message(
             event.reply_token,
