@@ -36,11 +36,9 @@ def main():
     workbook = xlsxwriter.Workbook('test.xlsx')
     worksheet = workbook.add_worksheet('issues')
     row = 0
-    col = 0
     for i in data:
-        print(i)
+        col = 0
         for j in i:
-            print(j)
             worksheet.write(row, col, j)
             col += 1
         row += 1
