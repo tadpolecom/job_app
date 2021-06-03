@@ -103,14 +103,15 @@ def check_messege(event):
         line_bot_api.reply_message(event.reply_token, TextSendMessage('thank you'))
         print(shift_data)
         enter = []
-        i = (len(shift_data) - 1) / 3
-        print((len(shift_data)-1)/3)
-        for j in range(1,i):
-            enter.append([shift_data[0],shift_data[i+1],shift_data[i+2],shift_data[i+3]])
-        with get_connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute('INSERT INTO shift_table (id,date,start,last) VALUES (%s, %s, %s, %s)',enter)
-            conn.commit()
+        if ((len(shift_data) - 1) % 3) == 0:
+            for j in range(1,round((len(shift_data) - 1) / 3)):
+                enter.append([shift_data[0],shift_data[i+1],shift_data[i+2],shift_data[i+3]])
+            with get_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute('INSERT INTO shift_table (id,date,start,last) VALUES (%s, %s, %s, %s)',enter)
+                conn.commit()
+        else:
+            abort(400)
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage('もう一度「シフトを提出」と入力してください'))
         
