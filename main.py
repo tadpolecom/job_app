@@ -28,7 +28,7 @@ shift_data=[]
 def main():
     with get_connection as conn:
         with conn.cursor() as cur:
-            cur.execute('SELECT * FROM member_tb', ('foo',))
+            cur.execute('SELECT * FROM shift_table', ('foo',))
             rows = cur.fetchall()
 
     tmp = []
@@ -105,7 +105,7 @@ def check_messege(event):
         enter = []
         if ((len(shift_data) - 1) % 3) == 0:
             for i in range(1,round((len(shift_data) - 1) / 3)):
-                enter.append([shift_data[0], shift_data[i + 1], shift_data[i + 2], shift_data[i + 3]])
+                enter.append[(shift_data[0], shift_data[i + 1], shift_data[i + 2], shift_data[i + 3])]
             print(enter)
             with get_connection as conn:
                 with conn.cursor() as cur:
