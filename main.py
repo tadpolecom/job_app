@@ -65,7 +65,6 @@ def check_messege(event):
                 )
             )
         )
-        shift_data.append(event.postback.params['datetime'])
     elif event.message.text == "終了":
         line_bot_api.reply_message(event.reply_token, TextSendMessage('thank you'))
         print(shift_data)
@@ -76,7 +75,7 @@ def check_messege(event):
 @handler.add(PostbackEvent)
 def handle_postback(event):
     if event.postback.data == 'end':
-        shift_data.append(event.message.text)
+        shift_data.append(event.postback.params['time'])
         line_bot_api.reply_message(
             event.reply_token,
             TemplateSendMessage(
@@ -97,8 +96,8 @@ def handle_postback(event):
                 )
             )
         )
-        shift_data.append(event.postback.params['datetime'])
     elif event.postback.data == 'date':
+        shift_data.append(event.postback.params['date'])
         line_bot_api.reply_message(
             event.reply_token,
             TemplateSendMessage(
@@ -107,7 +106,7 @@ def handle_postback(event):
                     text='開始時間を入力してください',
                     actions=[
                         DatetimePickerAction(
-                            label='開始時間を入力',
+                            label='開始時間',
                             mode='time',
                             data='start',
                         ),
@@ -119,8 +118,8 @@ def handle_postback(event):
                 )
             )
         )
-        shift_data.append(event.postback.params['datetime'])
     elif event.postback.data == 'start':
+        shift_data.append(event.postback.params['time'])
         line_bot_api.reply_message(
             event.reply_token,
             TemplateSendMessage(
@@ -129,7 +128,7 @@ def handle_postback(event):
                     text='終了を入力してください',
                     actions=[
                         DatetimePickerAction(
-                            label='終了時間を入力',
+                            label='終了時間',
                             mode='time',
                             data='end',
                         ),
@@ -140,8 +139,7 @@ def handle_postback(event):
                     ]   
                 )
             )
-        )
-        shift_data.append(event.postback.params['datetime'])
+        )     
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage('登録に失敗しました'))
 
