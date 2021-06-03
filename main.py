@@ -67,7 +67,7 @@ def check_messege(event):
         )
     elif event.message.text == "終了":
         line_bot_api.reply_message(event.reply_token, TextSendMessage('thank you'))
-        print(event.postback.params['datetime'])
+        print(event.postback.params[shift_data])
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage('もう一度「シフトを提出」と入力してください'))
     
