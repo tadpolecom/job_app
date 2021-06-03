@@ -16,9 +16,9 @@
 database
 
 shift_table
-| num | id | start | last |
+| id | date | start | last |
 |:---|:-----|:-----|:-----------|
-| オートインクリメントのid | 社員番号などの入力されたID | 入力された出勤時間 | 入力された退勤時間 |
+| 社員番号などの入力されたID | 入力された日付 | 入力された出勤時間 | 入力された退勤時間 |
 
 
 # Getting started
