@@ -4,7 +4,7 @@ import os
 import xlsxwriter
 
 
-class database:
+class shift:
     def __init__(self):
         self.get_connection = psycopg2.connect(os.environ.get('DATABASE_URL'))
 
@@ -15,7 +15,7 @@ class database:
 
         with self.get_connection() as conn:
             with conn.cursor() as cur:
-                cur.execute('INSERT INTO shift_table (id,date,start,end) VALUES (%s, %s, %s, %s)',data)
+                cur.execute('INSERT INTO shift_table (id,date,start,last) VALUES (%s, %s, %s, %s)',data)
             conn.commit()
 
     def into_xlsx(self):
