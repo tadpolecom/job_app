@@ -107,7 +107,8 @@ def check_messege(event):
         if ((len(shift_data) - 1) % 3) == 0:
             for i in range(round((len(shift_data) - 1) / 3)):
                 enter.append([shift_data[0], shift_data[i + 1], shift_data[i + 2], shift_data[i + 3]])
-            print(enter+','+round((len(shift_data) - 1) / 3))
+            print(enter)
+            print(round((len(shift_data) - 1) / 3))
 
             #test = [[8, 7, 6, 5], [4, 3, 2, 1]]
             with get_connection as conn:
