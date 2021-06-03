@@ -32,7 +32,7 @@ $ pip install -r requirements.txt
 and deploy
 
 * https:// hoge＿url /callback  
-　をWebhook URLとして登録。
+をWebhook URLとして登録。
 
 # Usage
 環境変数として登録したLINEBOTアカウントに対し「シフトを提出」と入力すると、IDの入力、時間の入力が開始される。
