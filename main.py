@@ -32,7 +32,7 @@ def main():
         with conn.cursor() as cur:
             cur.execute('SELECT * FROM shift_table', ('foo',))
             data = cur.fetchall()
-
+    print(data)
     workbook = xlsxwriter.Workbook('fileName' + '.xlsx')
     worksheet = workbook.add_worksheet('issues')
     row = 0
