@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request, abort, render_template, request, redirect, send_from_directory
+from flask import Flask, request, abort, send_from_directory
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -24,23 +24,23 @@ regi_num = ['123456','abcdef']
 shift_data=[]
 
 
+
 @app.route("/")
 def main():
     with get_connection as conn:
         with conn.cursor() as cur:
             cur.execute('SELECT * FROM shift_table', ('foo',))
-            rows = cur.fetchall()
+            data = cur.fetchall()
 
-    rowNum = 0
     workbook = xlsxwriter.Workbook('fileName' + '.xlsx')
     worksheet = workbook.add_worksheet('issues')
-    rowNum = 0
-    for tmp in rows:
-        j = 0
-        for item in tmp:
-            worksheet.write(rowNum, j, item)
-            j += 1
-        rowNum += 1
+    row = 0
+    col = 0
+    for i in data:
+        for j in i:
+            worksheet.write(row, col, j)
+            col =+ 1
+        row =+ 1
     workbook.close()
 
     DOWNLOAD_DIR_PATH = "."
@@ -53,31 +53,26 @@ def main():
 
 @app.route("/callback", methods=['POST'])
 def callback():
-    # hederとbodyから署名の確認に必要な情報を取得
     signature = request.headers['X-Line-Signature']
     body = request.get_data(as_text=True)
-
-    # 署名の確認
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
-
-    return 'OK'
 
 
 @handler.add(MessageEvent, message=TextMessage)
 def check_messege(event):
     if event.message.text == "シフトを提出":
         line_bot_api.reply_message(event.reply_token, TextSendMessage('登録番号を入力してください(6桁数字)'))
-    elif event.message.text == regi_num:
+    elif event.message.text in regi_num:
         shift_data.append(event.message.text)
         line_bot_api.reply_message(
             event.reply_token,
             TemplateSendMessage(
-                alt_text='もう一度お試しください',
+                alt_text='もう一度「シフトを提出」と入力してください',
                 template=ConfirmTemplate(
-                    text='シフトを入力しますか？',
+                    text='日付を入力してください',
                     actions=[
                         DatetimePickerAction(
                             label='日付',
@@ -93,8 +88,6 @@ def check_messege(event):
             )
         )
     elif event.message.text == "終了":
-        line_bot_api.reply_message(event.reply_token, TextSendMessage('thank you'))
-
         if ((len(shift_data) - 1) % 3) == 0:
             enter = []
             for i in range(round((len(shift_data) - 1) / 3)):
@@ -104,22 +97,65 @@ def check_messege(event):
                 with conn.cursor() as cur:
                     cur.executemany('INSERT INTO shift_table (id,date,start,last) VALUES (%s, %s, %s, %s)',enter)
                 conn.commit()
-        else:
-            abort(300)
+            line_bot_api.reply_message(event.reply_token, TextSendMessage('提出が完了しました。'))
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage('もう一度「シフトを提出」と入力してください'))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage('途中で終了しました。「シフトを提出」と入力し、もう一度始めからお願いします。'))
         
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
-    if event.postback.data == 'end':
+    if event.postback.data == 'date':
+        shift_data.append(event.postback.params['date'])
+        line_bot_api.reply_message(
+            event.reply_token,
+            TemplateSendMessage(
+                alt_text='もう一度お試しください',
+                template=ConfirmTemplate(
+                    text='出勤時間を入力してください',
+                    actions=[
+                        DatetimePickerAction(
+                            label='出勤時間',
+                            mode='time',
+                            data='start',
+                        ),
+                        MessageAction(
+                            label='提出をやめる',
+                            text='終了'
+                        )
+                    ]   
+                )
+            )
+        )
+    elif event.postback.data == 'start':
         shift_data.append(event.postback.params['time'])
         line_bot_api.reply_message(
             event.reply_token,
             TemplateSendMessage(
                 alt_text='もう一度お試しください',
                 template=ConfirmTemplate(
-                    text='シフトを入力しますか？',
+                    text='退勤時間を入力してください',
+                    actions=[
+                        DatetimePickerAction(
+                            label='退勤時間',
+                            mode='time',
+                            data='end',
+                        ),
+                        MessageAction(
+                            label='提出をやめる',
+                            text='終了'
+                        )
+                    ]   
+                )
+            )
+        )
+    elif event.postback.data == 'end':
+        shift_data.append(event.postback.params['time'])
+        line_bot_api.reply_message(
+            event.reply_token,
+            TemplateSendMessage(
+                alt_text='もう一度お試しください',
+                template=ConfirmTemplate(
+                    text='続けてシフトを入力しますか？',
                     actions=[
                         DatetimePickerAction(
                             label='日付',
@@ -134,55 +170,9 @@ def handle_postback(event):
                 )
             )
         )
-    elif event.postback.data == 'date':
-        shift_data.append(event.postback.params['date'])
-        line_bot_api.reply_message(
-            event.reply_token,
-            TemplateSendMessage(
-                alt_text='もう一度お試しください',
-                template=ConfirmTemplate(
-                    text='開始時間を入力してください',
-                    actions=[
-                        DatetimePickerAction(
-                            label='開始時間',
-                            mode='time',
-                            data='start',
-                        ),
-                        MessageAction(
-                            label='終了',
-                            text='終了'
-                        )
-                    ]   
-                )
-            )
-        )
-    elif event.postback.data == 'start':
-        shift_data.append(event.postback.params['time'])
-        line_bot_api.reply_message(
-            event.reply_token,
-            TemplateSendMessage(
-                alt_text='もう一度お試しください',
-                template=ConfirmTemplate(
-                    text='終了を入力してください',
-                    actions=[
-                        DatetimePickerAction(
-                            label='終了時間',
-                            mode='time',
-                            data='end',
-                        ),
-                        MessageAction(
-                            label='終了',
-                            text='終了'
-                        )
-                    ]   
-                )
-            )
-        )     
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage('登録に失敗しました'))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage('入力に失敗しました。「シフトを提出」と入力し、もう一度始めからお願いします。'))
 
 
-
-#herokuにおいてポートはランダムに環境変数PORTで決められる
 if __name__ == "__main__":
     app.run(debug=False, host='0.0.0.0', port=os.environ.get('PORT'))
