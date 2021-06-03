@@ -104,13 +104,20 @@ def check_messege(event):
         print(shift_data)
         enter = []
         if ((len(shift_data) - 1) % 3) == 0:
+            """
             for i in range(1,round((len(shift_data) - 1) / 3)):
                 enter.append[(shift_data[0], shift_data[i + 1], shift_data[i + 2], shift_data[i + 3])]
             print(enter)
+            (shift_data[0], shift_data[i + 1], shift_data[i + 2], shift_data[i + 3])
+            """
+            a = 1
+            b = 2
+            c = 3
+            d = 4
             with get_connection as conn:
                 with conn.cursor() as cur:
                     for i in range(1,round((len(shift_data) - 1) / 3)):
-                        cur.execute('INSERT INTO shift_table (id,date,start,last) VALUES (%s, %s, %s, %s)', (shift_data[0], shift_data[i + 1], shift_data[i + 2], shift_data[i + 3]))
+                        cur.execute('INSERT INTO shift_table (id,date,start,last) VALUES (%s, %s, %s, %s)', [a,b,c,d])
                 conn.commit()
         else:
             abort(400)
