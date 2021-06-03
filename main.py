@@ -33,14 +33,12 @@ def main():
             cur.execute('SELECT id,date,start,last FROM shift_table', ('foo',))
             data = cur.fetchall()
 
-    workbook = xlsxwriter.Workbook('fileName' + '.xlsx')
+    workbook = xlsxwriter.Workbook('test.xlsx')
     worksheet = workbook.add_worksheet('issues')
     row = 0
     col = 0
     for i in data:
-        print(i)
         for j in i:
-            print(j)
             worksheet.write(row, col, j)
             col =+ 1
         row =+ 1
@@ -48,7 +46,7 @@ def main():
 
     DOWNLOAD_DIR_PATH = "."
     downloadFileName = "test.xlsx"
-    downloadFile = "fileName.xlsx"
+    downloadFile = "test.xlsx"
 
     return send_from_directory(DOWNLOAD_DIR_PATH, downloadFile, \
         as_attachment = True, attachment_filename = downloadFileName, \
