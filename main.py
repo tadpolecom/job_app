@@ -109,19 +109,21 @@ def check_messege(event):
             regi_flag = False
             enter_flag = False
         else:
-            line_bot_api.reply_message(event.reply_token,'途中で終了しました。「シフトを提出」と入力し、もう一度始めからお願いします。')
+            line_bot_api.reply_message(event.reply_token,TextSendMessage('途中で終了しました。「シフトを提出」と入力し、もう一度始めからお願いします。'))
     elif enter_flag == True:
-        line_bot_api.reply_message(event.reply_token,'先ほど送信されたボタンのどちらかを押してください。送信されていない場合は「シフトを提出」と入力し、もう一度始めからお願いします。')
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('先ほど送信されたボタンのどちらかを押してください。送信されていない場合は「シフトを提出」と入力し、もう一度始めからお願いします。'))
         regi_flag = True
         enter_flag = True
     elif regi_flag == True:
-        line_bot_api.reply_message(event.reply_token,'登録番号が間違っています。')
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('登録番号が間違っています。'))
         regi_flag = True
         enter_flag = False
     else:
-        line_bot_api.reply_message(event.reply_token,'シフトを提出するためには「シフトを提出」と入力してください。')
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('シフトを提出するためには「シフトを提出」と入力してください。'))
         regi_flag = False
         enter_flag = False
+
+    
 
 
 @handler.add(PostbackEvent)
