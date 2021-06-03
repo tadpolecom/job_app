@@ -111,7 +111,8 @@ def check_messege(event):
         else:
             handle_error('途中で終了しました。「シフトを提出」と入力し、もう一度始めからお願いします。',event.reply_token)
     elif regi_flag == True:
-        handle_error('登録番号が間違っています。',event.reply_token)
+        handle_error('登録番号が間違っています。', event.reply_token)
+        regi_flag = True
     elif enter_flag == True:
         handle_error('先ほど送信されたボタンのどちらかを押してください。送信されていない場合は「シフトを提出」と入力し、もう一度始めからお願いします。',event.reply_token)
     else:
@@ -119,6 +120,8 @@ def check_messege(event):
 
 def handle_error(messege,reply):
     line_bot_api.reply_message(reply, TextSendMessage(messege))
+    global regi_flag
+    global enter_flag
     regi_flag = False
     enter_flag = False
 
