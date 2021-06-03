@@ -30,15 +30,17 @@ enter_flag = False
 def main():
     with get_connection as conn:
         with conn.cursor() as cur:
-            cur.execute('SELECT * FROM shift_table', ('foo',))
+            cur.execute('SELECT id,date,start,last FROM shift_table', ('foo',))
             data = cur.fetchall()
-    print(data)
+
     workbook = xlsxwriter.Workbook('fileName' + '.xlsx')
     worksheet = workbook.add_worksheet('issues')
     row = 0
     col = 0
     for i in data:
+        print(i)
         for j in i:
+            print(j)
             worksheet.write(row, col, j)
             col =+ 1
         row =+ 1
