@@ -11,7 +11,7 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage,ConfirmTemplate,DatetimePickerAction,MessageAction,PostbackEvent
 )
 
-from db import database
+from db import shift
 
 app = Flask(__name__)
 
@@ -23,7 +23,7 @@ shift_data=[]
 
 @app.route("/")
 def main():
-    database.into_xlsx
+    shift.into_xlsx
     return "hello world"
 
 @app.route("/callback", methods=['POST'])
@@ -69,7 +69,7 @@ def check_messege(event):
         )
     elif event.message.text == "終了":
         line_bot_api.reply_message(event.reply_token, TextSendMessage('thank you'))
-        database.insert(shift_data)
+        shift.insert(shift_data)
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage('もう一度「シフトを提出」と入力してください'))
     
