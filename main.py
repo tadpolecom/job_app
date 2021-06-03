@@ -117,7 +117,7 @@ def check_messege(event):
     else:
         handle_error('シフトを提出するためには「シフトを提出」と入力してください。',event.reply_token)
 
-def handle_error(messege,reply,option):
+def handle_error(messege,reply,option = 0):
     line_bot_api.reply_message(reply, TextSendMessage(messege))
     global regi_flag
     global enter_flag
