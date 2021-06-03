@@ -101,22 +101,18 @@ def check_messege(event):
         )
     elif event.message.text == "終了":
         line_bot_api.reply_message(event.reply_token, TextSendMessage('thank you'))
-        print(shift_data)
-        enter = []
-        
+
         if ((len(shift_data) - 1) % 3) == 0:
+            enter = []
             for i in range(round((len(shift_data) - 1) / 3)):
                 enter.append([shift_data[0], shift_data[i + 1], shift_data[i + 2], shift_data[i + 3]])
-            print(enter)
-            print(round((len(shift_data) - 1) / 3))
-
-            #test = [[8, 7, 6, 5], [4, 3, 2, 1]]
+ 
             with get_connection as conn:
                 with conn.cursor() as cur:
                     cur.executemany('INSERT INTO shift_table (id,date,start,last) VALUES (%s, %s, %s, %s)',enter)
                 conn.commit()
         else:
-            abort(400)
+            abort(300)
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage('もう一度「シフトを提出」と入力してください'))
         
