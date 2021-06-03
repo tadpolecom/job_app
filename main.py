@@ -70,9 +70,9 @@ def check_messege(event):
     if event.message.text == "シフトを提出":
         line_bot_api.reply_message(event.reply_token, TextSendMessage('登録番号を入力してください(6桁数字)'))
         regi_flag = True
-    elif event.message.text in regi_num and regi_flag == True:
+    elif event.message.text in regi_num and regi_flag == True and enter_flag == False:
         enter_flag = True
-        shift_data = []
+        shift_data.clear()
         shift_data.append(event.message.text)
         line_bot_api.reply_message(
             event.reply_token,
