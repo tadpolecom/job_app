@@ -42,8 +42,8 @@ def main():
         for j in i:
             print(j)
             worksheet.write(row, col, j)
-            col =+ 1
-        row =+ 1
+            col += 1
+        row += 1
     workbook.close()
 
     DOWNLOAD_DIR_PATH = "."
