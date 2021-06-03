@@ -20,7 +20,7 @@ app = Flask(__name__)
 line_bot_api = LineBotApi(os.environ['YOUR_CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['YOUR_CHANNEL_SECRET'])
 get_connection = psycopg2.connect(os.environ.get('DATABASE_URL'))
-regi_num = ['123456','abcdef']
+regi_num = ['123456','abcdef']#dbに登録する
 shift_data=[]
 regi_flag = False
 enter_flag = False
@@ -67,8 +67,6 @@ def callback():
 def check_messege(event):
     global regi_flag
     global enter_flag
-    print(regi_flag)
-    print(enter_flag)
     if event.message.text == "シフトを提出":
         line_bot_api.reply_message(event.reply_token, TextSendMessage('登録番号を入力してください(6桁数字)'))
         regi_flag = True
@@ -95,7 +93,7 @@ def check_messege(event):
                 )
             )
         )
-    elif event.message.text == "終了" and regi_flag and enter_flag == True:
+    elif event.message.text == "終了" and regi_flag == True and enter_flag == True:
         if ((len(shift_data) - 1) % 3) == 0:
             enter = []
             for i in range(round((len(shift_data) - 1) / 3)):
@@ -108,8 +106,9 @@ def check_messege(event):
             line_bot_api.reply_message(event.reply_token, TextSendMessage('提出が完了しました。'))
             regi_flag = False
             enter_flag = False
+
         else:
-            line_bot_api.reply_message(event.reply_token,TextSendMessage('途中で終了しました。「シフトを提出」と入力し、もう一度始めからお願いします。'))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage('途中で終了しました。「シフトを提出」と入力し、もう一度始めからお願いします。'))       
     elif enter_flag == True:
         line_bot_api.reply_message(event.reply_token,TextSendMessage('先ほど送信されたボタンのどちらかを押してください。送信されていない場合は「シフトを提出」と入力し、もう一度始めからお願いします。'))
         regi_flag = True
@@ -124,8 +123,6 @@ def check_messege(event):
         enter_flag = False
 
     
-
-
 @handler.add(PostbackEvent)
 def handle_postback(event):
     if event.postback.data == 'date':
