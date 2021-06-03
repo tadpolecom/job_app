@@ -24,7 +24,7 @@ shift_data=[]
 @app.route("/")
 def main():
     
-    return shift.into_xlsx()
+    return shift().into_xlsx()
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -69,7 +69,7 @@ def check_messege(event):
         )
     elif event.message.text == "終了":
         line_bot_api.reply_message(event.reply_token, TextSendMessage('thank you'))
-        shift.insert(shift_data)
+        shift().insert(shift_data)
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage('もう一度「シフトを提出」と入力してください'))
     
