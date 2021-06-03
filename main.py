@@ -75,7 +75,8 @@ shift_data=[]
 @app.route("/")
 def main():
     ins = shift()
-    return ins.into_xlsx()
+    ins3=ins.into_xlsx()
+    return ins3
 
 @app.route("/callback", methods=['POST'])
 def callback():
