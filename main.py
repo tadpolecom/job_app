@@ -102,8 +102,10 @@ def check_messege(event):
     elif event.message.text == "終了":
         line_bot_api.reply_message(event.reply_token, TextSendMessage('thank you'))
         print(shift_data)
-        enter=[]
-        for i in range(1,(len(shift_data)-1)/3):
+        enter = []
+        i = (len(shift_data) - 1) / 3
+        print((len(shift_data)-1)/3)
+        for j in range(1,i):
             enter.append([shift_data[0],shift_data[i+1],shift_data[i+2],shift_data[i+3]])
         with get_connection() as conn:
             with conn.cursor() as cur:
