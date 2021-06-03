@@ -117,7 +117,7 @@ def check_messege(event):
             with get_connection as conn:
                 with conn.cursor() as cur:
                     for i in range(1,round((len(shift_data) - 1) / 3)):
-                        cur.execute('INSERT INTO shift_table (id,date,start,last) VALUES (%s, %s, %s, %s)', [a,b,c,d])
+                        cur.execute('INSERT INTO shift_table (id,date,start,last) VALUES (%s, %s, %s, %s)', [1,2,3,4])
                 conn.commit()
         else:
             abort(400)
