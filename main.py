@@ -53,9 +53,9 @@ def check_messege(event):
                     text='シフトを入力しますか？',
                     actions=[
                         DatetimePickerAction(
-                            label='日時を選択',
-                            mode='datetime',
-                            data='time',
+                            label='日付',
+                            mode='date',
+                            data='date',
                         ),
                         MessageAction(
                             label='終了',
@@ -65,6 +65,7 @@ def check_messege(event):
                 )
             )
         )
+        shift_data.append(event.postback.params['datetime'])
     elif event.message.text == "終了":
         line_bot_api.reply_message(event.reply_token, TextSendMessage('thank you'))
         print(shift_data)
@@ -74,18 +75,63 @@ def check_messege(event):
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
-    if event.postback.data == 'time':
+    if event.postback.data == 'end':
+        shift_data.append(event.message.text)
         line_bot_api.reply_message(
             event.reply_token,
             TemplateSendMessage(
                 alt_text='もう一度お試しください',
                 template=ConfirmTemplate(
-                    text='登録完了。続けますか？',
+                    text='シフトを入力しますか？',
                     actions=[
                         DatetimePickerAction(
-                            label='日時を選択',
-                            mode='datetime',
-                            data='time',
+                            label='日付',
+                            mode='date',
+                            data='date',
+                        ),
+                        MessageAction(
+                            label='終了',
+                            text='終了'
+                        )
+                    ]   
+                )
+            )
+        )
+        shift_data.append(event.postback.params['datetime'])
+    elif event.postback.data == 'date':
+        line_bot_api.reply_message(
+            event.reply_token,
+            TemplateSendMessage(
+                alt_text='もう一度お試しください',
+                template=ConfirmTemplate(
+                    text='開始時間を入力してください',
+                    actions=[
+                        DatetimePickerAction(
+                            label='開始時間を入力',
+                            mode='time',
+                            data='start',
+                        ),
+                        MessageAction(
+                            label='終了',
+                            text='終了'
+                        )
+                    ]   
+                )
+            )
+        )
+        shift_data.append(event.postback.params['datetime'])
+    elif event.postback.data == 'start':
+        line_bot_api.reply_message(
+            event.reply_token,
+            TemplateSendMessage(
+                alt_text='もう一度お試しください',
+                template=ConfirmTemplate(
+                    text='終了を入力してください',
+                    actions=[
+                        DatetimePickerAction(
+                            label='終了時間を入力',
+                            mode='time',
+                            data='end',
                         ),
                         MessageAction(
                             label='終了',
