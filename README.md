@@ -1,59 +1,54 @@
-# Name（リポジトリ/プロジェクト/OSSなどの名前）
+# DATETIME data via LINE API to locacl(.xlsx) 
 
-分かりやすくてカッコイイ名前をつける（今回は"hoge"という名前をつける）
+アルバイトなどのシフト希望調査に利用することを想定して制作しました。
+利用者はラインのBOTアカウントに、事前に登録されたIDと日時情報を送信します。
+管理者はWebサイトを訪問することで、それらのデータをエクセルでダウンロードできます。(ログイン機能は未実装)
 
-"hoge"が何かを簡潔に紹介する
-
-# DEMO
-
-"hoge"の魅力が直感的に伝えわるデモ動画や図解を載せる
-
-# Features
-
-"hoge"のセールスポイントや差別化などを説明する
 
 # Requirement
 
-"hoge"を動かすのに必要なライブラリなどを列挙する
+* python-3.9.5
+* Flask　2.0.1
+* line-bot-sdk　1.19.0
+* psycopg2　2.8.6
+* XlsxWriter　1.4.3
 
-* huga 3.5.2
-* hogehuga 1.0.2
+database
 
-# Installation
+shift_table
+| num | id | start | last |
+|:---|:-----|:-----|:-----------|
+| オートインクリメントのid | 社員番号などの入力されたID | 入力された出勤時間 | 入力された退勤時間 |
 
-Requirementで列挙したライブラリなどのインストール方法を説明する
 
-```bash
-pip install huga_package
+# Getting started
 ```
+$ export　YOUR_CHANNEL_ACCESS_TOKEN　= LINE_CHANNEL_SECRET
+$ export　YOUR_CHANNEL_SECRET = LINE_CHANNEL_ACCESS_TOKEN
+$ export　DATABASE_URL =  YOUR_DATABASE_URL
+
+$ pip install -r requirements.txt
+```
+and deploy
+
+* https:// hoge＿url /callback 
+　をWebhook URLとして登録。
 
 # Usage
+環境変数として登録したLINEBOTアカウントに対し「シフトを提出」と入力すると、IDの入力、時間の入力が開始される。
 
-DEMOの実行方法など、"hoge"の基本的な使い方を説明する
+* https:// hoge_url /
+　にアクセスすることでエクセルファイルのダウンロードが開始される。
+入力されたデータすべてが出力されるが、SQLを書き換えることで変更できる。
 
-```bash
-git clone https://github.com/hoge/~
-cd examples
-python demo.py
-```
 
 # Note
+On the last sentence 'app.run(debug=False, host='0.0.0.0', port=os.environ.get('PORT'))'
+'port=os.environ.get('PORT')' is not necessary if deploy by yourself.
 
-注意点などがあれば書く
+It is only needed for heroku(PaaS).
 
-# Author
-
-作成情報を列挙する
-
-* 作成者
-* 所属
-* E-mail
-
-# License
-ライセンスを明示する
-
-"hoge" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
-
-社内向けなら社外秘であることを明示してる
-
-"hoge" is Confidential.
+# Reference
+flask: https://github.com/pallets/flask
+line messaging api reference: https://developers.line.biz/ja/docs/messaging-api/
+line bot sdk python: https://github.com/line/line-bot-sdk-python
