@@ -65,6 +65,10 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def check_messege(event):
+    global regi_flag
+    global enter_flag
+    print(regi_flag)
+    print(enter_flag)
     if event.message.text == "シフトを提出":
         line_bot_api.reply_message(event.reply_token, TextSendMessage('登録番号を入力してください(6桁数字)'))
         regi_flag = True
