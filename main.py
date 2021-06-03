@@ -104,16 +104,16 @@ def check_messege(event):
             regi_flag = False
             enter_flag = False
         else:
-            handle_error('途中で終了しました。「シフトを提出」と入力し、もう一度始めからお願いします。',event)
+            handle_error('途中で終了しました。「シフトを提出」と入力し、もう一度始めからお願いします。',event.reply_token)
     elif regi_flag:
-        handle_error('登録番号が間違っています。',event)
+        handle_error('登録番号が間違っています。',event.reply_token)
     elif enter_flag:
-        handle_error('先ほど送信されたボタンのどちらかを押してください。送信されていない場合は「シフトを提出」と入力し、もう一度始めからお願いします。',event)
+        handle_error('先ほど送信されたボタンのどちらかを押してください。送信されていない場合は「シフトを提出」と入力し、もう一度始めからお願いします。',event.reply_token)
     else:
-        handle_error('シフトを提出するためには「シフトを提出」と入力してください。',event)
+        handle_error('シフトを提出するためには「シフトを提出」と入力してください。',event.reply_token)
 
-def handle_error(messege,event):
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(messege))
+def handle_error(messege,reply):
+    line_bot_api.reply_message(reply, TextSendMessage(messege))
     regi_flag = False
     enter_flag = False
 
