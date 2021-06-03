@@ -94,6 +94,8 @@ def check_messege(event):
             )
         )
     elif event.message.text == "終了" and regi_flag == True and enter_flag == True:
+        print(len(shift_data))
+        print((len(shift_data) - 1) % 3)
         if ((len(shift_data) - 1) % 3) == 0:
             enter = []
             for i in range(round((len(shift_data) - 1) / 3)):
@@ -106,7 +108,6 @@ def check_messege(event):
             line_bot_api.reply_message(event.reply_token, TextSendMessage('提出が完了しました。'))
             regi_flag = False
             enter_flag = False
-
         else:
             line_bot_api.reply_message(event.reply_token, TextSendMessage('途中で終了しました。「シフトを提出」と入力し、もう一度始めからお願いします。'))       
     elif enter_flag == True:
