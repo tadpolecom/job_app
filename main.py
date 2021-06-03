@@ -22,7 +22,8 @@ handler = WebhookHandler(os.environ['YOUR_CHANNEL_SECRET'])
 get_connection = psycopg2.connect(os.environ.get('DATABASE_URL'))
 regi_num = ['123456','abcdef']
 shift_data=[]
-
+regi_flag = False
+enter_flag = False
 
 
 @app.route("/")
