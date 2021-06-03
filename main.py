@@ -95,7 +95,7 @@ def check_messege(event):
         )
     elif event.message.text == "終了" and regi_flag == True and enter_flag == True:
         print(len(shift_data))
-        print((len(shift_data) - 1) % 3)
+        print(shift_data)
         if ((len(shift_data) - 1) % 3) == 0:
             enter = []
             for i in range(round((len(shift_data) - 1) / 3)):
