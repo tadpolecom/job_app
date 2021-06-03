@@ -1,7 +1,6 @@
 import os
 
 from flask import Flask, request, abort
-
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -11,6 +10,8 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,TemplateSendMessage,ConfirmTemplate,DatetimePickerAction,MessageAction,PostbackEvent
 )
+
+from db import database
 
 app = Flask(__name__)
 
@@ -22,7 +23,8 @@ shift_data=[]
 
 @app.route("/")
 def main():
-     return "hello world"
+    database.into_xlsx
+    return "hello world"
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -67,7 +69,7 @@ def check_messege(event):
         )
     elif event.message.text == "終了":
         line_bot_api.reply_message(event.reply_token, TextSendMessage('thank you'))
-        print(shift_data)
+        database.insert(shift_data)
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage('もう一度「シフトを提出」と入力してください'))
     
@@ -142,6 +144,7 @@ def handle_postback(event):
         )     
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage('登録に失敗しました'))
+
 
 
 #herokuにおいてポートはランダムに環境変数PORTで決められる

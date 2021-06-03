@@ -1,2 +1,4 @@
 Flask==2.0.1
 line-bot-sdk==1.19.0
+psycopg2==2.8.6
+XlsxWriter==1.4.3
