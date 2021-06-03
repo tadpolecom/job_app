@@ -38,7 +38,9 @@ def main():
     row = 0
     col = 0
     for i in data:
+        print(i)
         for j in i:
+            print(j)
             worksheet.write(row, col, j)
             col =+ 1
         row =+ 1
