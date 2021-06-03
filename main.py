@@ -103,21 +103,17 @@ def check_messege(event):
         line_bot_api.reply_message(event.reply_token, TextSendMessage('thank you'))
         print(shift_data)
         enter = []
+        
         if ((len(shift_data) - 1) % 3) == 0:
             """
             for i in range(1,round((len(shift_data) - 1) / 3)):
-                enter.append[(shift_data[0], shift_data[i + 1], shift_data[i + 2], shift_data[i + 3])]
+                enter.append(shift_data[0], shift_data[i + 1], shift_data[i + 2], shift_data[i + 3])
             print(enter)
-            (shift_data[0], shift_data[i + 1], shift_data[i + 2], shift_data[i + 3])
             """
-            a = 1
-            b = 2
-            c = 3
-            d = 4
+            test = [[8, 7, 6, 5], [4, 3, 2, 1]]
             with get_connection as conn:
                 with conn.cursor() as cur:
-                    for i in range(1,round((len(shift_data) - 1) / 3)):
-                        cur.execute('INSERT INTO shift_table (id,date,start,last) VALUES (%s, %s, %s, %s)', [1,2,3,4])
+                    cur.executemany('INSERT INTO shift_table (id,date,start,last) VALUES (%s, %s, %s, %s)',test)
                 conn.commit()
         else:
             abort(400)
