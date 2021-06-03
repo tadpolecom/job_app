@@ -66,7 +66,9 @@ def callback():
 def check_messege(event):
     if event.message.text == "シフトを提出":
         line_bot_api.reply_message(event.reply_token, TextSendMessage('登録番号を入力してください(6桁数字)'))
-    elif event.message.text in regi_num:
+        regi_flag = True
+    elif event.message.text in regi_num and regi_flag:
+        enter_flag = True
         shift_data.append(event.message.text)
         line_bot_api.reply_message(
             event.reply_token,
@@ -88,7 +90,7 @@ def check_messege(event):
                 )
             )
         )
-    elif event.message.text == "終了":
+    elif event.message.text == "終了" and regi_flag and enter_flag:
         if ((len(shift_data) - 1) % 3) == 0:
             enter = []
             for i in range(round((len(shift_data) - 1) / 3)):
@@ -99,8 +101,22 @@ def check_messege(event):
                     cur.executemany('INSERT INTO shift_table (id,date,start,last) VALUES (%s, %s, %s, %s)',enter)
                 conn.commit()
             line_bot_api.reply_message(event.reply_token, TextSendMessage('提出が完了しました。'))
+            regi_flag = False
+            enter_flag = False
+        else:
+            handle_error('途中で終了しました。「シフトを提出」と入力し、もう一度始めからお願いします。')
+    elif regi_flag:
+        handle_error('登録番号が間違っています。')
+    elif enter_flag:
+        handle_error('先ほど送信されたボタンのどちらかを押してください。送信されていない場合は「シフトを提出」と入力し、もう一度始めからお願いします。')
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage('途中で終了しました。「シフトを提出」と入力し、もう一度始めからお願いします。'))
+        handle_error('シフトを提出するためには「シフトを提出」と入力してください。')
+
+def handle_error(messege,event):
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(messege))
+    regi_flag = False
+    enter_flag = False
+
         
 
 @handler.add(PostbackEvent)
