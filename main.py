@@ -24,7 +24,7 @@ shift_data=[]
 @app.route("/")
 def main():
     
-    return shift.into_xlsx
+    return shift.into_xlsx()
 
 @app.route("/callback", methods=['POST'])
 def callback():
