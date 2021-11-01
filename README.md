@@ -35,12 +35,11 @@ and deploy
 をWebhook URLとして登録。
 
 # Usage
-環境変数として登録したLINEBOTアカウントに対し「シフトを提出」と入力すると、IDの入力、時間の入力が開始される。
+従業員はLINEBOTアカウントに対し「シフトを提出」と入力すると、IDの入力、時間の入力が開始される。
 
-* https:// hoge_url /  
-にアクセスすることでエクセルファイルのダウンロードが開始される。
-入力されたデータすべてが出力されるが、SQLを書き換えることで変更できる。
-
+経営者、管理者は
+* https:// ... /  
+にアクセスすることでログインし、エクセルファイルのダウンロードが開始できる。
 
 # Note
 On the last sentence `app.run(debug=False, host='0.0.0.0', port=os.environ.get('PORT'))`  
